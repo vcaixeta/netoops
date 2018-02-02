@@ -56,7 +56,7 @@ resource "aws_route_table_association" "priv-rt-subnet-b" {
 }
 
 
-#Output Variables
+#Output Variables, so we can use these values in other Modules
 output "subnet_pub_a_id" {
   value = "${aws_subnet.net-public-a.id}"
 }

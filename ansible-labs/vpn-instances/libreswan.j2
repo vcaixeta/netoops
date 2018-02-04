@@ -1,0 +1,32 @@
+{% if ( left_side in inventory_hostname) %}
+conn {{ conn_name }}
+  left=%defaultroute
+  leftid={{ left_id }}
+  right={{ right_peer }}
+  authby=secret
+  leftsubnet=0.0.0.0/0
+  rightsubnet=0.0.0.0/0
+  auto=start
+  # route-based VPN requires marking and an interface
+  mark=5/0xffffffff
+  vti-interface={{ vti_left }}
+  # do not setup routing because we don't want to send 0.0.0.0/0 over the tunnel
+  vti-routing=no
+
+{% endif %}
+
+{% if ( right_side in inventory_hostname) %}
+conn {{ conn_name }}
+  right=%defaultroute
+  rightid={{ right_id }}
+  left={{left_peer}}
+  authby=secret
+  leftsubnet=0.0.0.0/0
+  rightsubnet=0.0.0.0/0
+  auto=start
+  # route-based VPN requires marking and an interface
+  mark=5/0xffffffff
+  vti-interface={{ vti_right }}
+  # do not setup routing because we don't want to send 0.0.0.0/0 over the tunnel
+  vti-routing=no
+{% endif %}

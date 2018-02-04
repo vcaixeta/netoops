@@ -1,0 +1,19 @@
+---
+#Name for the VPN Connetion
+conn_name: euc1-euw1
+#EUW1, Left Side
+left_id: 52.211.207.206
+left_peer: 52.211.207.206
+left_side: vpn02.euw1.netoops.net
+vti_left: vti0
+left_subnet: 10.250.0.0/24
+
+#EUC1, right Side
+right_peer: 52.58.236.243
+right_id: 52.58.236.243
+right_side: vpn02.euc1.netoops.net
+vti_right: vti0
+right_subnet: 10.240.0.0/24
+
+#PSK to be used. Note: PSK is stored on vault-psk
+vpn_psk: "{{ vault_vpn01_psk }}"

@@ -1,0 +1,41 @@
+---
+- hosts: vpn01.euc1.*,vpn01.euw1.*
+  gather_facts: no
+  vars_files:
+    - ./vpn_vars/vault.yml
+    - ./vpn_vars/vpn01-euc1-euw1.yml
+
+  tasks:
+  - name: write the vpn config file
+    template: src=libreswan.j2 dest=/etc/ipsec.d/{{ conn_name }}.conf
+    become: true
+    register: tunnel
+
+  - name: write the vpn secrets file
+    template: src=libreswan_secrets.j2 dest=/etc/ipsec.d/{{ conn_name }}.secrets
+    become: true
+
+
+  - name: Activate the tunnel
+    shell: "{{ item }}" 
+    with_items:
+      - ipsec auto --rereadsecrets
+      - ipsec auto --add {{ conn_name }}
+      - ipsec auto --up {{ conn_name }}
+    become: true
+    when: tunnel.changed
+
+
+  - name: Install Routes left
+    shell: ip route add {{ right_subnet }} dev {{ vti_left }}
+    when: (left_side in inventory_hostname) and tunnel.changed
+    become: true
+
+  - name: Install Routes Right
+    shell: ip route add {{ left_subnet }} dev {{ vti_right }}
+    when: (right_side in inventory_hostname) and tunnel.changed
+    become: true
+
+  - name: ensure ipsec is running
+    service: name=ipsec state=started
+    become: true

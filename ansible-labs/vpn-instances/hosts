@@ -1,0 +1,10 @@
+[euc1]
+vpn01.euc1.netoops.net ansible_host=18.196.67.47
+vpn02.euc1.netoops.net ansible_host=52.58.236.243
+
+[euw1]
+vpn01.euw1.netoops.net ansible_host=34.243.28.111
+vpn02.euw1.netoops.net ansible_host=52.211.207.206
+
+[test]
+127.0.0.1

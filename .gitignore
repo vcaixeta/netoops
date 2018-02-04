@@ -3,3 +3,5 @@
 *.pub
 *.pem
 *.json
+*.retry
+vault.yml

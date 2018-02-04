@@ -10,7 +10,7 @@ variable "ami_name" {
 variable "subnet_id" {
   default = ""
 }
-variable "sg_id" {
+variable "sg_vpn_id" {
   default = ""
 }
 variable "key_name" {
@@ -33,7 +33,7 @@ resource "aws_instance" "instance" {
   key_name       = "${var.key_name}"
 
   associate_public_ip_address = "true"
-  vpc_security_group_ids      = ["${var.sg_id}"]
+  vpc_security_group_ids      = ["${var.sg_vpn_id}"]
   source_dest_check           = false
 
   tags {

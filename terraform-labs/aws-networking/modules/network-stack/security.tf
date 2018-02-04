@@ -33,10 +33,52 @@ resource "aws_security_group" "sg-untrust" {
   description = "allow inbound https and ssh only"
   vpc_id = "${aws_vpc.vpc.id}"
 
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+#Define a SG to be applied to our VPN Instances, it allows SSH, IKE and ESP only.
+resource "aws_security_group" "sg-vpn" {
+  name = "vpn-security-group"
+  tags {
+        name = "sg-vpn"
+  }
+  description = "allow inbound https and ssh only"
+  vpc_id = "${aws_vpc.vpc.id}"
+
   ingress {
         from_port = 0
         to_port = 0
-        protocol = "-1"
+        protocol = "50"
+        cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+        from_port = 500
+        to_port = 500
+        protocol = "udp"
+        cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+        from_port = 4500
+        to_port = 4500
+        protocol = "udp"
+        cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+        from_port = 8
+        to_port = 0
+        protocol = "icmp"
         cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
@@ -77,4 +119,8 @@ resource "aws_security_group" "sg-trust" {
 
 output "sg_id" {
   value = "${aws_security_group.sg-untrust.id}"
+}
+
+output "sg_vpn_id" {
+  value = "${aws_security_group.sg-vpn.id}"
 }

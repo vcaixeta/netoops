@@ -23,7 +23,7 @@ module "network-stack" {
   subnet-private-b  = "10.240.0.192/26" 
 }
 
-module "vpn-instance" {
+module "vpn-instance01a" {
   #configuration parameters
   source            = "../../modules/vpn-instance"
   instance_name     = "vpn01a"
@@ -33,6 +33,20 @@ module "vpn-instance" {
 
   #These Values come from the Module network-stack, when defining Output Variables.
   subnet_id         = "${module.network-stack.subnet_pub_a_id}"  
-  sg_id             = "${module.network-stack.sg_id}"
+  sg_vpn_id             = "${module.network-stack.sg_vpn_id}"
+  key_name          = "${aws_key_pair.setup_key.key_name}"
+}
+
+module "vpn-instance02b" {
+  #configuration parameters
+  source            = "../../modules/vpn-instance"
+  instance_name     = "vpn02b"
+  #ami can be obtained on AWS MarkePlace, we are using CentOS7.
+  ami_name          = "ami-337be65c"
+  type              = "c3.large"
+
+  #These Values come from the Module network-stack, when defining Output Variables.
+  subnet_id         = "${module.network-stack.subnet_pub_b_id}"  
+  sg_vpn_id             = "${module.network-stack.sg_vpn_id}"
   key_name          = "${aws_key_pair.setup_key.key_name}"
 }

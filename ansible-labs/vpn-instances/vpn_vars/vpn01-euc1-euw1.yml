@@ -1,0 +1,16 @@
+---
+#Name for the VPN Connetion
+conn_name: euc1-euw1
+#EUW1, Left Side
+left_id: 34.243.28.111
+left_peer: 34.243.28.111
+left_side: vpn01.euw1.netoops.net
+vti_left: vti0
+left_subnet: 10.250.0.0/24
+
+#EUC1, right Side
+right_peer: 18.196.67.47
+right_id: 18.196.67.47
+right_side: vpn01.euc1.netoops.net
+vti_right: vti0
+right_subnet: 10.240.0.0/24

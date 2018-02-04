@@ -1,8 +1,9 @@
 ---
-- hosts: vpn02.euc1.*,vpn02.euw1.*
+- hosts: vpn01.euc1.*,vpn01.euw1.*
   gather_facts: no
   vars_files:
-    - ./vpn_vars/vpn02-euc1-euw1.yml
+    - ./vpn_vars/vault.yml
+    - ./vpn_vars/vpn01-euc1-euw1.yml
 
   tasks:
   - name: write the vpn config file
@@ -24,16 +25,15 @@
     become: true
     when: tunnel.changed
 
-  #- pause: seconds=10
 
   - name: Install Routes left
     shell: ip route add {{ right_subnet }} dev {{ vti_left }}
-    when: (left_side in inventory_hostname)
+    when: (left_side in inventory_hostname) and tunnel.changed
     become: true
 
   - name: Install Routes Right
     shell: ip route add {{ left_subnet }} dev {{ vti_right }}
-    when: (right_side in inventory_hostname)
+    when: (right_side in inventory_hostname) and tunnel.changed
     become: true
 
   - name: ensure ipsec is running

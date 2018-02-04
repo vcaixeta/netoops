@@ -4,3 +4,4 @@
 *.pem
 *.json
 *.retry
+vault.yml

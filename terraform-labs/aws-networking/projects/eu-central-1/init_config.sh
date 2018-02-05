@@ -3,8 +3,8 @@ echo "Debug file..."
 cat >/var/tmp/something_happened.txt
 
 echo "Updating and Installing packages..."
-sudo yum update
 sudo yum -y install epel-release
+sudo yum update
 sudo yum -y install libreswan
 sudo yum -y install python-pip
 

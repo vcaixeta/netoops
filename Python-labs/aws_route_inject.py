@@ -48,14 +48,21 @@ def get_vti_routes():
 
 def get_route_tables(describe_rt):
 	route_tables = {}
-	result = []
+	tables = []
+	routes = []
 
 	for i in describe_rt['RouteTables']:
+
+		#Save the list of routes that already exist so we can either Create or Replace the routes later on.
+		for x in i['Routes']:
+			#print x['DestinationCidrBlock']
+			routes.append(x['DestinationCidrBlock'])
 		if not i['Associations'][0]['Main']:
 			route_tables['rtb_id']  = i['RouteTableId']
-			result.append(dict(route_tables))
+			#route_tables['routes']  = i['Routes'][0]['DestinationCidrBlock']
+			tables.append(dict(route_tables))
 
-	return result
+	return tables, routes
 
 def main():
 
@@ -66,17 +73,29 @@ def main():
 	client 	     = boto3.client('ec2',region_name=region)
 	ec2 		 = boto3.resource('ec2',region_name=region)
 	describe_rt  = client.describe_route_tables(Filters=[{'Name': 'vpc-id', 'Values': [vpc_id]}])
-	route_tables = get_route_tables(describe_rt)
-	vpn_routes   = get_vti_routes()
 	
+	vpn_routes   = get_vti_routes()
+	route_tables, routes = get_route_tables(describe_rt)
+	
+	#Makes the list Unique.
+	routes = list(set(routes))
+
 	for i in route_tables:
 
 		route_table = ec2.RouteTable(i['rtb_id'])
 		for cidr in vpn_routes:
-			route = route_table.create_route(
-			    DestinationCidrBlock=cidr,
-			    InstanceId=instance_id,
-		)
+			if cidr in routes:
+
+				route = client.replace_route(
+				    DestinationCidrBlock=cidr,
+				    InstanceId=instance_id,
+				    RouteTableId=i['rtb_id'],
+			)
+			else:
+				route = route_table.create_route(
+				    DestinationCidrBlock=cidr,
+				    InstanceId=instance_id,
+				)					
 
 if __name__ == "__main__":
     main()

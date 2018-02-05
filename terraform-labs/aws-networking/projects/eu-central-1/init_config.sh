@@ -2,9 +2,14 @@
 echo "Debug file..."
 cat >/var/tmp/something_happened.txt
 
-echo "Upodating and Installing libreswan..."
+echo "Updating and Installing packages..."
 sudo yum update
+sudo yum -y install epel-release
 sudo yum -y install libreswan
+sudo yum -y install python-pip
+
+echo "Installing usefull Python functions..."
+sudo pip install boto3
 
 echo "Enabling IPSEC..."
 sudo systemctl start ipsec

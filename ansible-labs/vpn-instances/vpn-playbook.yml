@@ -1,9 +1,9 @@
 ---
-- hosts: vpn01.euc1.*,vpn01.euw1.*
+- hosts: vpn02.euw1.*,vpn02.euc1.*
   gather_facts: no
   vars_files:
     - ./vpn_vars/vault.yml
-    - ./vpn_vars/vpn01-euc1-euw1.yml
+    - ./vpn_vars/vpn02-euc1-euw1.yml
 
   tasks:
   - name: write the vpn config file

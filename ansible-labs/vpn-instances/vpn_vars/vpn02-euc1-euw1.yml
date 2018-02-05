@@ -16,4 +16,4 @@ vti_right: vti0
 right_subnet: 10.240.0.0/24
 
 #PSK to be used. Note: PSK is stored on vault-psk
-vpn_psk: "{{ vault_vpn01_psk }}"
+vpn_psk: "{{ vault_vpn02_psk }}"

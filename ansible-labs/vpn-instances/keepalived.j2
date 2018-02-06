@@ -1,4 +1,11 @@
 {% if ( left_side in inventory_hostname) %}
+vrrp_script vpn_check {
+  script       "/usr/local/bin/vpn_check.sh"
+  interval 2   # check every 2 seconds
+  fall 2       # require 2 failures for KO
+  rise 2       # require 2 successes for OK
+}
+
 vrrp_instance VPN {
     interface ens3
     state MASTER
@@ -10,12 +17,23 @@ vrrp_instance VPN {
         {{ host2 }}
     }
 
+    track_script {
+    vpn_check
+  }    
+
   notify_master "/usr/local/bin/master.sh"
 
 }
 {% endif %}
 
 {% if ( right_side in inventory_hostname) %}
+vrrp_script vpn_check {
+  script       "/usr/local/bin/vpn_check.sh"
+  interval 2   # check every 2 seconds
+  fall 2       # require 2 failures for KO
+  rise 2       # require 2 successes for OK
+}
+
 vrrp_instance VPN {
     interface ens3
     state BACKUP
@@ -26,6 +44,10 @@ vrrp_instance VPN {
     unicast_peer {
         {{ host1 }}
     }
+
+    track_script {
+    vpn_check
+  }    
 
     notify_master "/usr/local/bin/master.sh"
 }

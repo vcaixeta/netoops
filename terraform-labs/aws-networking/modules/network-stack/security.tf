@@ -118,7 +118,7 @@ resource "aws_security_group" "sg-trust" {
 }
 
 output "sg_id" {
-  value = "${aws_security_group.sg-untrust.id}"
+  value = "${aws_security_group.sg-trust.id}"
 }
 
 output "sg_vpn_id" {

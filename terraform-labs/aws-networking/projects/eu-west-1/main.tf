@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_key_pair" "setup_key" {
-  key_name = "lab-keys"
+  key_name = "lab-keys-2"
   public_key = "${file("./ssh-key.pub")}"
 }
 
@@ -43,5 +43,19 @@ module "vpn-instance02b" {
   #These Values come from the Module network-stack, when defining Output Variables.
   subnet_id         = "${module.network-stack.subnet_pub_b_id}"  
   sg_vpn_id             = "${module.network-stack.sg_vpn_id}"
+  key_name          = "${aws_key_pair.setup_key.key_name}"
+}
+
+module "test-instance01a" {
+  #configuration parameters
+  source            = "../../modules/test-instance"
+  instance_name     = "test01a"
+  #ami can be obtained on AWS MarkePlace, we are using CentOS7.
+  ami_name          = "ami-016f9e78"
+  type              = "c3.large"
+
+  #These Values come from the Module network-stack, when defining Output Variables.
+  subnet_id         = "${module.network-stack.subnet_priv_a_id}"  
+  sg_id             = "${module.network-stack.sg_id}"
   key_name          = "${aws_key_pair.setup_key.key_name}"
 }

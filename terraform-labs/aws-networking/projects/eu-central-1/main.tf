@@ -50,3 +50,17 @@ module "vpn-instance02b" {
   sg_vpn_id             = "${module.network-stack.sg_vpn_id}"
   key_name          = "${aws_key_pair.setup_key.key_name}"
 }
+
+module "test-instance01a" {
+  #configuration parameters
+  source            = "../../modules/test-instance"
+  instance_name     = "test01a"
+  #ami can be obtained on AWS MarkePlace, we are using CentOS7.
+  ami_name          = "ami-f4de519b"
+  type              = "c3.large"
+
+  #These Values come from the Module network-stack, when defining Output Variables.
+  subnet_id         = "${module.network-stack.subnet_priv_a_id}"  
+  sg_id             = "${module.network-stack.sg_id}"
+  key_name          = "${aws_key_pair.setup_key.key_name}"
+}

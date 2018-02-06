@@ -27,8 +27,9 @@ sudo systemctl start ipsec
 
 
 echo "Installing requirements for Keepalived"
-sudo apt-get install gcc kernel-headers kernel-devel
-sudo apt-get install openssl-devel libnl3-devel ipset-devel iptables-devel libnfnetlink-devel
+sudo apt-get -y install gcc kernel-headers kernel-devel
+sudo apt-get -y install openssl-devel libnl3-devel ipset-devel iptables-devel libnfnetlink-devel
+sudo apt-get -y install keepalived
 
 echo "Installing python and tools"
 sudo apt-get -y install python-setuptools python-dev build-essential
@@ -99,7 +100,7 @@ def get_ifname():
         return i.split(':')[1].strip()
 
 def get_mac_address(ifname):
-    return subprocess.check_output(['ip', '-o', 'link', 'show', ifname]).split()[14]
+    return subprocess.check_output(['ip', '-o', 'link', 'show', ifname]).split()[16]
 
 def get_vpc_id(ifname):
     response = requests.get('http://169.254.169.254/latest/meta-data/network/interfaces/macs/{}/vpc-id'.format(get_mac_address(ifname)))

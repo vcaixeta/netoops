@@ -1,0 +1,32 @@
+{% if ( left_side in inventory_hostname) %}
+vrrp_instance VPN {
+    interface ens3
+    state MASTER
+    priority 200
+
+    virtual_router_id 33
+    unicast_src_ip {{ host1 }}
+    unicast_peer {
+        {{ host2 }}
+    }
+
+  notify_master "/usr/local/bin/master.sh"
+
+}
+{% endif %}
+
+{% if ( right_side in inventory_hostname) %}
+vrrp_instance VPN {
+    interface ens3
+    state BACKUP
+    priority 100
+
+    virtual_router_id 33
+    unicast_src_ip {{ host2 }}
+    unicast_peer {
+        {{ host1 }}
+    }
+
+    notify_master "/usr/local/bin/master.sh"
+}
+{% endif %}

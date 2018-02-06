@@ -28,7 +28,7 @@ module "vpn-instance01a" {
   source            = "../../modules/vpn-instance"
   instance_name     = "vpn01a"
   #ami can be obtained on AWS MarkePlace, we are using CentOS7.
-  ami_name          = "ami-337be65c"
+  ami_name          = "ami-f4de519b"
   type              = "c3.large"
 
   #These Values come from the Module network-stack, when defining Output Variables.
@@ -42,7 +42,7 @@ module "vpn-instance02b" {
   source            = "../../modules/vpn-instance"
   instance_name     = "vpn02b"
   #ami can be obtained on AWS MarkePlace, we are using CentOS7.
-  ami_name          = "ami-337be65c"
+  ami_name          = "ami-f4de519b"
   type              = "c3.large"
 
   #These Values come from the Module network-stack, when defining Output Variables.

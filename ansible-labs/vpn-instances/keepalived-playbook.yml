@@ -1,0 +1,24 @@
+---
+- hosts: vpn0*.euc1.*
+  #gather_facts: no
+  vars:
+    left_side: 'vpn01.euc1.netoops.net'
+    right_side: 'vpn02.euc1.netoops.net'
+    host1: "{{ hostvars['vpn01.euc1.netoops.net']['ansible_ens3']['ipv4']['address'] }}"
+    host2: "{{ hostvars['vpn02.euc1.netoops.net']['ansible_ens3']['ipv4']['address'] }}"
+
+  tasks:
+  - name: write the keepalived config file
+    template: src=keepalived.j2 dest=/etc/keepalived/keepalived.conf
+    become: true
+    notify:
+      - restart keepalived
+
+  - name: ensure keepalived is running
+    service: name=ipsec state=started
+    become: true
+
+  handlers:
+    - name: restart keepalived
+      service: name=keepalived state=restarted
+      become: true
